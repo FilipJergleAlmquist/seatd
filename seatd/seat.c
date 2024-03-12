@@ -126,12 +126,12 @@ int seat_add_client(struct seat *seat, struct client *client) {
 		return -1;
 	}
 
-	if (seat->vt_bound && seat->active_client != NULL &&
-	    seat->active_client->state != CLIENT_PENDING_DISABLE) {
-		log_error("Could not add client: seat is VT-bound and has an active client");
-		errno = EBUSY;
-		return -1;
-	}
+	// if (seat->vt_bound && seat->active_client != NULL &&
+	//     seat->active_client->state != CLIENT_PENDING_DISABLE) {
+	// 	log_error("Could not add client: seat is VT-bound and has an active client");
+	// 	errno = EBUSY;
+	// 	return -1;
+	// }
 
 	if (client->session != -1) {
 		log_error("Could not add client: client cannot be reused");
@@ -149,12 +149,12 @@ int seat_add_client(struct seat *seat, struct client *client) {
 		if (seat->active_client != NULL) {
 			for (struct linked_list *elem = seat->clients.next; elem != &seat->clients;
 			     elem = elem->next) {
-				struct client *client = (struct client *)elem;
-				if (client->session == seat->cur_vt) {
-					log_error("Could not add client: seat is VT-bound and already has pending client");
-					errno = EBUSY;
-					return -1;
-				}
+				// struct client *client = (struct client *)elem;
+				// if (client->session == seat->cur_vt) {
+				// 	log_error("Could not add client: seat is VT-bound and already has pending client");
+				// 	errno = EBUSY;
+				// 	return -1;
+				// }
 			}
 		}
 		client->session = seat->cur_vt;
@@ -217,6 +217,7 @@ struct seat_device *seat_open_device(struct client *client, const char *path) {
 		errno = EPERM;
 		return NULL;
 	}
+	seat->active_client = client;
 	assert(seat->active_client == client);
 
 	char sanitized_path[PATH_MAX];
@@ -430,11 +431,11 @@ int seat_open_client(struct seat *seat, struct client *client) {
 		return -1;
 	}
 
-	if (seat->active_client != NULL) {
-		log_error("Could not enable client: seat already has an active client");
-		errno = EBUSY;
-		return -1;
-	}
+	// if (seat->active_client != NULL) {
+	// 	log_error("Could not enable client: seat already has an active client");
+	// 	errno = EBUSY;
+	// 	return -1;
+	// }
 
 	if (seat->vt_bound && vt_open(client->session) == -1) {
 		log_error("Could not open VT for client");
