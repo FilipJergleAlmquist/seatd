@@ -3,7 +3,7 @@
 
 #define MAX_PATH_LEN     256
 #define MAX_SEAT_LEN     64
-#define MAX_SEAT_DEVICES 128
+#define MAX_SEAT_DEVICES 1024
 #define MAX_SESSION_LEN  64
 
 #define CLIENT_EVENT(opcode) (opcode)
